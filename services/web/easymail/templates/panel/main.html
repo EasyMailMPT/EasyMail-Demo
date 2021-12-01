@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html style="background-color: transparent" >
+   <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta charset="utf-8">
+      <meta name="keywords" content="Easy, Email, EasyEmail, EasyMail, Mail Easy, Easy Mail, find email, email found, check emails, find any email in google, email finder, finder email">
+      <meta name="description" content="Easymail is a email finder wh">
+      <title>EasyMail - Finding emails never was easier!</title>
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.css') }}"media="screen">
+      <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome/css/all.css') }}"media="screen">
+      <meta http-equiv="cache-control" content="no-cache" />
+
+      <script defer src="{{url_for('static', filename='fontawesome/js/all.js')}}"></script>
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
+      <link
+         rel="stylesheet"
+         href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+         />
+         <style>
+         .middle {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  display:none;
+}
+.bar {
+  width: 10px;
+  height: 70px;
+  background: #fff;
+  display: inline-block;
+  transform-origin: bottom center;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+  /*   box-shadow:5px 10px 20px inset rgba(255,23,25.2); */
+  animation: loader 1.2s linear infinite;
+}
+.bar1 {
+  animation-delay: 0.1s;
+}
+.bar2 {
+  animation-delay: 0.2s;
+}
+.bar3 {
+  animation-delay: 0.3s;
+}
+.bar4 {
+  animation-delay: 0.4s;
+}
+.bar5 {
+  animation-delay: 0.5s;
+}
+.bar6 {
+  animation-delay: 0.6s;
+}
+.bar7 {
+  animation-delay: 0.7s;
+}
+.bar8 {
+  animation-delay: 0.8s;
+}
+
+@keyframes loader {
+  0% {
+    transform: scaleY(0.1);
+    background: ;
+  }
+  50% {
+    transform: scaleY(1);
+    background: yellowgreen;
+  }
+  100% {
+    transform: scaleY(0.1);
+    background: transparent;
+  }
+}
+
+         </style>
+   </head>
+
+  <body>
+   <nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="https://bulma.io">
+     <h1 class="title"><strong style="color:green">Easy</strong>Mail</h1>
+    </a>
+
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-start">
+      <a class="navbar-item">
+        Search
+      </a>
+
+      <a class="navbar-item">
+        History
+      </a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More
+        </a>
+
+        <div class="navbar-dropdown">
+          <a class="navbar-item">
+            About
+          </a>
+          <a class="navbar-item">
+            Premium
+          </a>
+          <a class="navbar-item">
+            Contact
+          </a>
+          <hr class="navbar-divider">
+          <a class="navbar-item">
+            Report an issue
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="buttons">
+          <a class="button is-primary">
+            <strong>Sign up</strong>
+          </a>
+          <a class="button is-light">
+            Log in
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+  {%block content%}
+  
+  <section class="section ">
+
+  <div class="box is-center">
+  <table class="table has-text-centered is-fullwidth">
+  <thead>
+    <tr>
+      <th>No.</th>
+      <th>Website</th>
+      <th>Email</th>
+      <th>Valid</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for mail in mails %}
+
+    <tr>
+      <th>{{loop.index}}</th>
+      <td>{{mail.url}}</a> 
+      </td>
+      <td>{{mail.email}}</td>
+      <td class="has-text-success">Yes</td>
+    </tr>
+   {%endfor%}
+  </tbody>
+</table>
+  </div>
+  </section>
+  {%endblock content%}
+  </body>
+    <script>
+    function loading(){
+     var  loading1 = document.getElementById('loading')
+     loading1.style.display = "block"
+       
+    }
+   </script>
+   <script src="https://cdn.websitepolicies.io/lib/cookieconsent/1.0.3/cookieconsent.min.js" defer></script><script>window.addEventListener("load",function(){window.wpcc.init({"border":"thin","corners":"small","colors":{"popup":{"background":"#e2f7d4","text":"#000000","border":"#7fc25e"},"button":{"background":"#7fc25e","text":"#ffffff"}},"position":"bottom-right","content":{"href":"https://easymailmedical.pl/policy","message":"Używamy ciasteczek do analizowania ruchu na stronie, aby lepiej zoptymalizować działanie serwisu.","link":"Dowiedz się więcej","button":"Akceptuje"}})});</script>
+</html>
