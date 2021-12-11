@@ -27,15 +27,15 @@ def search():
         
         ### Check if keyword exists in database ###
         database_response = check_database(keyword)
-        if database_response == None:
-            serp_resp = create_request(keyword,country,number)
+        if not database_response:
+            serp_resp = create_request(keyword, country, number)
             for url in serp_resp:
                 website = Websites(url=url,keyword=keyword)
                 db.session.add(website)
                 db.session.commit()
                 website_id = Websites.query.filter_by(url=url).all()
                 for id in website_id:
-                    emails = find_emails_in_html(url,id.id)
-        return redirect(url_for('Panel.panel',keyword=keyword))
-    return render_template('panel/search.html',form=form,title="Search")
+                    find_emails_in_html(url, id.id)
+        return redirect(url_for('Panel.panel', keyword=keyword))
+    return render_template('panel/search.html', form=form, title="Search")
                 
