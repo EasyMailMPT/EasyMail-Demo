@@ -13,7 +13,7 @@ url_regex = re.compile('<a\s.*?href=[\'"](.*?)[\'"].*?>')
 
 ### SERPAPI Get request #####
 def create_request(keyword, country, num_results):
-    serp_url = "http://api.serpstack.com/search?access_key=c1001e0f112fb0f38c66faf1da6532c4&query="+keyword+"&num="+num_results+"&gl="+country+"&hl="+country
+    serp_url = "http://api.serpstack.com/search?access_key=c1001e0f112fb0f38c66faf1da6532c4&query="+keyword+"&num="+num_results+"&gl="+country+"&hl="+country+"&period="+"last_week"+"&engine="+"google"+"&sort="+"relevance"
     response = requests.get(serp_url)
     organic_results = response.json()['organic_results']
     websites = []
