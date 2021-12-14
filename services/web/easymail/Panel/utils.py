@@ -23,7 +23,7 @@ def create_request(keyword, country, num_results):
     return websites
 
 
-### Check if emails for keyword exists in database ###
+### Check if emails for keyword exists in database /moved to models.py###
 def check_database(keyword):
     websites = Websites.query.filter_by(keyword=keyword).all()
     if websites is None:
@@ -59,4 +59,4 @@ def find_emails_in_html(url, website_id):
         if email_regex_check.match(email):
             emails = Emails(email=email, website_id=website_id)
             db.session.add(emails)
-            db.session.commit()
+    db.session.commit() #BP: better at the end (optimal)

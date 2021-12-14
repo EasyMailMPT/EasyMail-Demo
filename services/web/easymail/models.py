@@ -59,17 +59,28 @@ class Emails(db.Model):
 db.create_all()
 
 
-def get_user_by_email(session: db.orm.Session, email):
+def get_user_by_email(email):
     query = db.select(User).where(User.name == email)
-    return session.execute(query)
+    return db.session.execute(query)
 
 
-def get_emails_from_keyword(session: db.orm.Session, keyword):
+def get_emails_from_keyword(keyword):
     """returns dictionary with urls as keys and list of emails as values"""
-    result = {}
+    result = []
     q = db.select(Websites).where(Websites.keyword == keyword)
-    sites = session.execute(q)
+    sites = db.session.execute(q)
     for site in sites:
         q = db.select(Emails).where(Emails.website_id == site.Websites.id)
-        result['%s' % site.Websites.url] = session.execute(q)
+        emails = db.session.execute(q)
+        for email in emails:
+            result.append({'url': site.Websites.url, 'email': email.Emails.email})
     return result
+
+
+def check_if_keyword_in_database(keyword):
+    websites = Websites.query.filter_by(keyword=keyword).all()
+    if websites is None:
+        return False
+    else:
+        for website in websites:
+            return websites
