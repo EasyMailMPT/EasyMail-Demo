@@ -37,23 +37,21 @@ class User(db.Model, UserMixin):
             return None
         return User.query.get(user_id)
 
-
-class Websites(db.Model):
+class Keywords(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    url = db.Column(db.String(40000), unique=False, nullable=False)
     keyword = db.Column(db.String(4000), unique=False, nullable=False)
-    deleted = db.Column(db.Boolean, nullable=False, server_default='False')
-    created_at = db.Column(db.DateTime, server_default=db.func.now())
-    updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+    count = db.Column(db.Integer, nullable=False)
+    last_searched = db.Column(db.DateTime, server_default=db.func.now())
+
     emails = db.relationship('Emails', backref='websites', lazy=True)
 
 
 class Emails(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), nullable=False, unique=False)
-    website_id = db.Column(db.Integer, db.ForeignKey('websites.id'), nullable=True)
-    created_at = db.Column(db.DateTime, server_default=db.func.now())
-    updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+    website = db.Column(db.String(40000), unique=False, nullable=False)
+
+    keyword_id = db.Column(db.Integer, db.ForeignKey('keywords.id'), nullable=True)
 
 
 db.create_all()
@@ -64,23 +62,29 @@ def get_user_by_email(email):
     return db.session.execute(query)
 
 
-def get_emails_from_keyword(keyword):
+def get_emails_from_keyword(keyword, session = db.session):
     """returns dictionary with urls as keys and list of emails as values"""
     result = []
-    q = db.select(Websites).where(Websites.keyword == keyword)
-    sites = db.session.execute(q)
-    for site in sites:
-        q = db.select(Emails).where(Emails.website_id == site.Websites.id)
-        emails = db.session.execute(q)
-        for email in emails:
-            result.append({'url': site.Websites.url, 'email': email.Emails.email})
+    q = db.select(Keywords).where(Keywords.keyword == keyword)
+    key = session.execute(q).first()
+    print(key)
+    if key is None:
+        return []
+    q = db.select(Emails).where(Emails.keyword_id == key.Keywords.id)
+    emails = session.execute(q)
+    for email in emails:
+        result.append({'url': email.Emails.website, 'email': email.Emails.email})
     return result
 
-
-def check_if_keyword_in_database(keyword):
-    websites = Websites.query.filter_by(keyword=keyword).all()
-    if websites is None:
+def check_if_keyword_in_database(keyword, count = 1):
+    result = Keywords.query.filter_by(keyword=keyword).count()
+    if result >= count:
         return False
     else:
-        for website in websites:
-            return websites
+        return True
+
+def delete_results_of_keyword(keyword, session = db.session):
+    q = db.delete(Emails).where(Keywords.keyword == keyword).where(Emails.keyword_id == Keywords.id)
+    session.execute(q)
+    q = db.delete(Keywords).where(Keywords.keyword == keyword)
+    session.execute(q)

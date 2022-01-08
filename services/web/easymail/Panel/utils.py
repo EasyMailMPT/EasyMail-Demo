@@ -2,7 +2,7 @@ import urllib, urllib.request, urllib.error, urllib.parse
 import re
 from easymail import app,db
 from serpapi import GoogleSearch
-from easymail.models import Emails, Websites
+from easymail.models import Emails, Keywords
 import requests
 
 
@@ -23,18 +23,8 @@ def create_request(keyword, country, num_results):
     return websites
 
 
-### Check if emails for keyword exists in database /moved to models.py###
-def check_database(keyword):
-    websites = Websites.query.filter_by(keyword=keyword).all()
-    if websites is None:
-        return 0
-    else:
-        for website in websites:
-            return websites
-
-
 ### First depth search function
-def find_emails_in_html(url, website_id):
+def find_emails_in_html(url, keyword_id, session=db.session):
     url_parse_retries = 2
     html = None
     for _ in range(url_parse_retries):
@@ -57,6 +47,6 @@ def find_emails_in_html(url, website_id):
 
     for email in email_regex.findall(text_data):
         if email_regex_check.match(email):
-            emails = Emails(email=email, website_id=website_id)
-            db.session.add(emails)
-    db.session.commit() #BP: better at the end (optimal)
+            emails = Emails(email=email,website=url, keyword_id=keyword_id)
+            session.add(emails)
+    session.commit() #BP: better at the end (optimal)
