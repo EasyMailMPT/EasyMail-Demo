@@ -65,26 +65,23 @@ def get_user_by_email(email):
 def get_emails_from_keyword(keyword, session = db.session):
     """returns dictionary with urls as keys and list of emails as values"""
     result = []
-    q = db.select(Keywords).where(Keywords.keyword == keyword)
-    key = session.execute(q).first()
-    print(key)
-    if key is None:
-        return []
-    q = db.select(Emails).where(Emails.keyword_id == key.Keywords.id)
+    q = db.select(Emails).where(Keywords.keyword == keyword).where(Emails.keyword_id == Keywords.id).execution_options(synchronize_session="fetch")
     emails = session.execute(q)
     for email in emails:
         result.append({'url': email.Emails.website, 'email': email.Emails.email})
     return result
 
-def check_if_keyword_in_database(keyword, count = 1):
-    result = Keywords.query.filter_by(keyword=keyword).count()
+def check_if_keyword_in_database(keyword, count = 1, session=db.session):
+    result = session.query(Emails).filter(Keywords.keyword==keyword, Keywords.id == Emails.keyword_id).count()
     if result >= count:
-        return False
-    else:
+        print('True')
         return True
+    else:
+        print('True')
+        return False
 
 def delete_results_of_keyword(keyword, session = db.session):
-    q = db.delete(Emails).where(Keywords.keyword == keyword).where(Emails.keyword_id == Keywords.id)
+    q = db.delete(Emails).where(Keywords.keyword == keyword).where(Emails.keyword_id == Keywords.id).execution_options(synchronize_session="fetch")
     session.execute(q)
     q = db.delete(Keywords).where(Keywords.keyword == keyword)
     session.execute(q)
