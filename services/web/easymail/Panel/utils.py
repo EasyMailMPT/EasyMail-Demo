@@ -45,8 +45,9 @@ def find_emails_in_html(url, keyword_id, session=db.session):
     if not text_data:
         return
 
-    for email in email_regex.findall(text_data):
+    emails = set(email_regex.findall(text_data))
+    for email in emails:
         if email_regex_check.match(email):
-            emails = Emails(email=email,website=url, keyword_id=keyword_id)
-            session.add(emails)
+            email_to_send = Emails(email=email,website=url, keyword_id=keyword_id)
+            session.add(email_to_send)
     session.commit() #BP: better at the end (optimal)

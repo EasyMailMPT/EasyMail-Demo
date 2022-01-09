@@ -3,6 +3,9 @@ from easymail import app,db,bcrypt
 from easymail.Panel.forms import SearchForm
 from easymail.Panel.utils import create_request,find_emails_in_html
 from easymail.models import Keywords, Emails, check_if_keyword_in_database, get_emails_from_keyword, delete_results_of_keyword
+import threading, math
+
+THREAD_NUM = 4
 
 ### Setup blueprint - easier to navigate in the project
 Panel=Blueprint('Panel',__name__)
@@ -14,6 +17,10 @@ def panel(keyword, number = 0):
     #changed from horrible oneliner
     mails = get_emails_from_keyword(keyword)
     return render_template('panel/main.html', title='Panel',mails=mails)
+
+def search_html_call(urls_list, thread_id, keyword_id):
+    for i in range(math.ceil(len(urls_list)/THREAD_NUM*thread_id), math.floor(len(urls_list)/THREAD_NUM*(thread_id+1))):
+        find_emails_in_html(urls_list[i], keyword_id, session=db.session)
 
 @Panel.route('/search',methods=['GET','POST'])
 def search():
@@ -32,9 +39,18 @@ def search():
             key = Keywords(keyword=keyword, count=number)
             session.add(key)
             keyword_id = Keywords.query.filter_by(keyword=keyword).first()
-            #to do multithreadingu
-            for url in serp_resp:
-                find_emails_in_html(url, keyword_id.id, session=db.session)
+            t0 = threading.Thread(target=search_html_call, args=(serp_resp, 0, keyword_id))
+            t1 = threading.Thread(target=search_html_call, args=(serp_resp, 1, keyword_id))
+            t2 = threading.Thread(target=search_html_call, args=(serp_resp, 2, keyword_id))
+            t3 = threading.Thread(target=search_html_call, args=(serp_resp, 3, keyword_id))
+            t0.start()
+            t1.start()
+            t2.start()
+            t3.start()
+            t0.join()
+            t1.join()
+            t2.join()
+            t3.join()
             # more optimal to do at the end
             session.commit()
 
