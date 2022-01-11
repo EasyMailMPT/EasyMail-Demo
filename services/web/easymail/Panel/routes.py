@@ -20,7 +20,7 @@ def panel(keyword, number = 0):
 
 def search_html_call(urls_list, thread_id, keyword_id):
     for i in range(math.ceil(len(urls_list)/THREAD_NUM*thread_id), math.floor(len(urls_list)/THREAD_NUM*(thread_id+1))):
-        find_emails_in_html(urls_list[i], keyword_id, session=db.session)
+        find_emails_in_html(urls_list[i], keyword_id)
 
 @Panel.route('/search',methods=['GET','POST'])
 def search():
@@ -38,21 +38,14 @@ def search():
             serp_resp = create_request(keyword, country, str(number))
             key = Keywords(keyword=keyword, count=number)
             session.add(key)
-            keyword_id = Keywords.query.filter_by(keyword=keyword).first()
-            t0 = threading.Thread(target=search_html_call, args=(serp_resp, 0, keyword_id))
-            t1 = threading.Thread(target=search_html_call, args=(serp_resp, 1, keyword_id))
-            t2 = threading.Thread(target=search_html_call, args=(serp_resp, 2, keyword_id))
-            t3 = threading.Thread(target=search_html_call, args=(serp_resp, 3, keyword_id))
-            t0.start()
-            t1.start()
-            t2.start()
-            t3.start()
-            t0.join()
-            t1.join()
-            t2.join()
-            t3.join()
-            # more optimal to do at the end
             session.commit()
+            keyword_id = Keywords.query.filter_by(keyword=keyword).first()
+            thr_list = [threading.Thread(target=search_html_call, args=(serp_resp, id, keyword_id.id)) for id in range(0, THREAD_NUM)]
+            for thr in thr_list:
+                thr.start()
+            for thr in thr_list:
+                thr.join()
+
 
         return redirect(url_for('Panel.panel', keyword=keyword, number=number))
     return render_template('panel/search.html', form=form, title="Search")

@@ -24,7 +24,8 @@ def create_request(keyword, country, num_results):
 
 
 ### First depth search function
-def find_emails_in_html(url, keyword_id, session=db.session):
+def find_emails_in_html(url, keyword_id):
+    session = db.create_scoped_session({'bind':db.engine})
     url_parse_retries = 2
     html = None
     for _ in range(url_parse_retries):

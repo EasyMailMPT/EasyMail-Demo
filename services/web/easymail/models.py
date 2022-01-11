@@ -74,10 +74,8 @@ def get_emails_from_keyword(keyword, session = db.session):
 def check_if_keyword_in_database(keyword, count = 1, session=db.session):
     result = session.query(Emails).filter(Keywords.keyword==keyword, Keywords.id == Emails.keyword_id).count()
     if result >= count:
-        print('True')
         return True
     else:
-        print('True')
         return False
 
 def delete_results_of_keyword(keyword, session = db.session):
