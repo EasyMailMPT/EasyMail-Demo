@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="Easy, Email, EasyEmail, EasyMail, Mail Easy, Easy Mail, find email, email found, check emails, find any email in google, email finder, finder email">
+    <meta name="description" content="Easymail is a email finder wh">
+    <title>EasyMail - Finding emails never was easier!</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.css') }}"media="screen">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome/css/all.css') }}"media="screen">
+    <meta http-equiv="cache-control" content="no-cache" />
+
+    <script defer src="{{url_for('static', filename='fontawesome/js/all.js')}}"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
+    <link
+       rel="stylesheet"
+       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+       />
+</head>
+<body>
+    
+<section class="hero  is-fullheight" style="background: lightblue;">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered">
+            
+          <div class="column is-5-tablet is-4-desktop is-3-widescreen">
+            <img src="static/photos/logo.png">
+            <p class="title has-text-centered has-text-white">Register</p>
+            <form method="POST" action="" class="box">
+                {{form.hidden_tag()}}
+                <div class="field">
+                    <label for="" class="label">Name</label>
+                    <div class="control has-icons-left">
+                        {{form.name(class="input is-gold",placeholder="Name")}}
+                      <span class="icon is-small is-left">
+                        <i class="fa fa-envelope"></i>
+                      </span>
+                    </div>
+                  </div>
+              <div class="field">
+                <label for="" class="label">Email</label>
+                <div class="control has-icons-left">
+                    {{form.email(class="input is-gold",placeholder="Email")}}
+                  <span class="icon is-small is-left">
+                    <i class="fa fa-envelope"></i>
+                  </span>
+                </div>
+              </div>
+              <div class="field">
+                <label for="" class="label">Password</label>
+                <div class="control has-icons-left">
+                    {{form.password(class="input is-gold",placeholder="Password")}}
+                  <span class="icon is-small is-left">
+                    <i class="fa fa-lock"></i>
+                  </span>
+                </div>
+              </div>
+              <div class="field">
+                <label for="" class="label">Confirm Password</label>
+                <div class="control has-icons-left">
+                    {{form.confirm_password(class="input is-gold",placeholder="Confirm Password")}}
+                  <span class="icon is-small is-left">
+                    <i class="fa fa-lock"></i>
+                  </span>
+                </div>
+              </div>
+              
+              <div class="field">
+                {{form.submit(class="button is-primary")}}
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+
+  </html>

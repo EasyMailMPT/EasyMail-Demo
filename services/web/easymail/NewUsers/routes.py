@@ -15,21 +15,21 @@ NewUsers=Blueprint('NewUsers',__name__)
 def login():
     error=None
     if current_user.is_authenticated:
-        return redirect(url_for('Main.index'))
+        return redirect(url_for('Panel.search'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data) and user.confirmed == True and user.role=="patient":
+        if user and bcrypt.check_password_hash(user.password, form.password.data) and user.confirmed == True:
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('Account.account'))
+            return redirect(next_page) if next_page else redirect(url_for('Panel.search'))
         elif user and bcrypt.check_password_hash(user.password, form.password.data) and user.confirmed == True and user.role=="admin":
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('Admin.admin'))
         else:
             error="Nieprawidłowe hasło lub email"        
-    return render_template('main/login.html', title='Login', form=form,error=error)
+    return render_template('auth/login.html', title='Login', form=form,error=error)
 
 
 ###### Register Page ######
@@ -37,23 +37,21 @@ def login():
 def register():
     error=None
     if current_user.is_authenticated:
-        return redirect(url_for('Main.index'))
+        return redirect(url_for('Panel.search'))
     form = RegistrationForm()
-    if form.validate_on_submit():
-        if request.form.get('agree')!=None:
+    print("gti")
+    if request.method == "POST":
+        print("xd")
+        if form.validate_on_submit():
+            print("elo")
             hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-            user = User(name=form.name.data,phone=form.phone.data,email=form.email.data, password=hashed_password,age=form.age.data, street=form.street.data,city=form.city.data,post_code=form.postCode.data, role='patient')
+            user = User(name=form.name.data,email=form.email.data, password=hashed_password, confirmed=True)
             db.session.add(user)
             db.session.commit()
-            token = generate_confirmation_token(user.email)          
-            confirm_url = "https://easymailmedical.pl/confirm/"+token
-            html = render_template('main/email.html', confirm_url=confirm_url)
-            subject = "🚨 Zweryfikuj swoje konto | easymailmedical.pl"
-            send_email(user.email, subject, html)
-            return redirect(url_for("NewUsers.verification"))
-        else:
-            error="Musisz zaakcpetować politykę prywatności i regulamin"
-    return render_template('main/register.html', title='Register', form=form,error=error)
+        
+            return redirect(url_for("NewUsers.login"))
+        
+    return render_template('auth/register.html', title='Register', form=form,error=error)
 
 
 
@@ -136,6 +134,3 @@ def reset_token(token):
 def logout():
     logout_user()
     return redirect('login')
-
-
-

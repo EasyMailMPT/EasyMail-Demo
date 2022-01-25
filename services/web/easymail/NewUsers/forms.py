@@ -7,16 +7,12 @@ from easymail.models import User
 class RegistrationForm(FlaskForm):
    
     email = StringField('Email', validators=[DataRequired(),Length(min=4,max=60)])
-    phone = StringField('Telefon', validators=[Length(min=9)])
+   
     name = StringField('Name', validators=[DataRequired(),Length(max=20)])
     password = PasswordField('Hasło', validators=[DataRequired(),Length(min=8,max=86,message='Hasło musi mieć przynajmniej: 8 znaków, 1 duza literę i przynajmniej 1 jedną literę')])
     confirm_password = PasswordField('Powtórz hasło', validators=[DataRequired(),EqualTo('password','Hasła się nie zgadzają')])
-    phone = StringField('Telefon',validators=[DataRequired(),Length(max=14)])
-    street = StringField('Ulica',validators=[DataRequired()])
-    city = StringField('Miasto',validators=[DataRequired()])
-    postCode = StringField('Kod pocztowy',validators=[DataRequired()])
-    age = IntegerField('Wiek',validators=[DataRequired()])
-    submit = SubmitField('Zarejestruj się')
+   
+    submit = SubmitField('Register')
     
 
     def validate_email(self,email):
@@ -29,7 +25,7 @@ class LoginForm(FlaskForm):
    
     email = StringField('Email', validators=[DataRequired()])
     password = PasswordField('Hasło', validators=[DataRequired()])
-    submit = SubmitField('Zaloguj się')
+    submit = SubmitField('Login')
     remember = BooleanField('Zapamiętaj mnie')
 
 class RequestResetForm(FlaskForm):

@@ -7,4 +7,4 @@ Main=Blueprint('Main',__name__)
 @Main.route('/',methods=['GET','POST'])
 
 def main():
-    return redirect(url_for('Panel.search'))
+    return redirect(url_for('NewUsers.login'))

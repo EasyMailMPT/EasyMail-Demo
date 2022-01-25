@@ -17,12 +17,14 @@ class User(db.Model,UserMixin):
     name = db.Column(db.String(255), unique=False, nullable=False)
     phone = db.Column(db.String(255), unique=False, nullable=True)
     email = db.Column(db.String(255),unique=True,nullable=False)
+    password = db.Column(db.String(255),unique=False,nullable=False)
     role = db.Column(db.String(60),unique=False,nullable=False,server_default='free')
     confirmed = db.Column(db.Boolean, nullable=False, server_default='False')
     confirmed_on = db.Column(db.DateTime, nullable=True,server_default=db.func.now(), server_onupdate=db.func.now())
     deleted = db.Column(db.Boolean, nullable=False, server_default='False')
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+    userEmails = db.relationship('UserEmails',backref="userEmails",lazy=True)
 
     def get_reset_token(self, expires_sec=1800):
         s = Serializer(app.config['SECRET_KEY'], expires_sec)
@@ -52,5 +54,15 @@ class Emails(db.Model):
     website_id = db.Column(db.Integer, db.ForeignKey('websites.id'), nullable=True)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+    
+class UserEmails(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    website = db.Column(db.String(400000),unique=False,nullable=False)
+    keyword = db.Column(db.String(400000), unique=False,nullable=False)
+    email = db.Column(db.String(400000), unique=False,nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+    
 
 db.create_all()

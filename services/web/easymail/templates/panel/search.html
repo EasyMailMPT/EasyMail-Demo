@@ -1,31 +1,13 @@
-{% extends 'panel/main.html' %}
+{% extends 'main.html' %}
 {% block content %}
-<section class="section ">
-  <div class="box  ">
-  <form method="POST" action="">
-  <div class="columns is-multiline is-mobile">
+
+
   
-  {{form.hidden_tag()}}
-  <div class="column is-three-fifths">
-  {{form.keyword(class="input is-success",placeholder="Keyword")}}
 
-  </div>
-   <div class="column ">
-    {{form.number_of_links(class="input is-success",min=1,placeholder="Number of results")}}
-  </div>
-    <div class="column">
-   {{form.country(class="input is-success", type="select")}}
-   </div>
-    <div class="column ">
-   {{form.submit(class="button is-success",onclick="loading()")}}
-    </div>
-
-  </div>
-  </div>
-  </div>
-  </form>
-  </section>
-    <div class="middle" id="loading">
+	<section class="section">
+	
+			<div class="container has-text-centered is-vcentered">
+			   <div class="middle" id="loading">
   <div class="bar bar1"></div>
   <div class="bar bar2"></div>
   <div class="bar bar3"></div>
@@ -35,4 +17,83 @@
   <div class="bar bar7"></div>
   <div class="bar bar8"></div>
 </div>
+  
+					
+					<div class="column  has-text-left ">
+          <form method="POST" action="">
+          {{form.hidden_tag()}}
+						<div class="field">
+							<label class="label">Keyword</label>
+							<div class="control">
+							{{form.keyword(class="input is-gold",placeholder="Keyword")}}
+							</div>
+						</div>
+            <div class="columns">
+            <div class="column">
+						<div class="field">
+							<label class="label">Number of results</label>
+							<div class="control">
+							{{form.number_of_links(class="input is-gold",min=1,value=10,placeholder="Number of results")}}
+              
+							</div>
+						</div>
+            </div>
+                 <div class="column">
+						<div class="field">
+							<label class="label">Origin country</label>
+							<div class="control">
+						
+              {{form.country(class="input is-gold", type="select")}}
+							</div>
+						</div>
+            </div>
+            </div>
+              <div class="columns">
+            <div class="column">
+						<div class="field">
+							<label class="label">Device</label>
+							<div class="control">
+							{{form.device(class="input is-gold",min=1,value=10,placeholder="Number of results")}}
+              
+							</div>
+						</div>
+            </div>
+             <div class="column">
+						<div class="field">
+							<label class="label">Domain (ex.google.com)</label>
+							<div class="control">
+							{{form.domain(class="input is-gold",min=1,value=10,placeholder="Number of results")}}
+              
+							</div>
+						</div>
+            </div>
+                 <div class="column">
+						<div class="field">
+							<label class="label">Engine</label>
+							<div class="control">
+						
+              {{form.engine(class="input is-gold", type="select")}}
+							</div>
+						</div>
+            </div>
+            </div>
+					
+						<div class="control">
+							 {{form.submit(class="button is-gold-button",onclick="loading()")}}
+ 
+						</div>
+					</div>
+				</div>
+			</div>
+        </form>
+		</div>
+   
+	</section>
+  <section class="section">
+
+  
+  </section>
+     
+
+
 {% endblock content %}
