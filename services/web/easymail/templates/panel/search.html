@@ -1,24 +1,64 @@
 {% extends 'main.html' %}
+{% set active_page = "search" %}
 {% block content %}
 
+<style>
+	.lds-hourglass {
+		display: inline-block;
+		position: relative;
+		width: 80px;
+		height: 80px;
+	  }
+	  .lds-hourglass:after {
+		content: " ";
+		display: block;
+		border-radius: 50%;
+		width: 0;
+		height: 0;
+		margin: 8px;
+		box-sizing: border-box;
+		border: 32px solid #dfc;
+		border-color: #dfc transparent #dfc transparent;
+		animation: lds-hourglass 1.2s infinite;
+	  }
+	  @keyframes lds-hourglass {
+		0% {
+		  transform: rotate(0);
+		  animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+		}
+		50% {
+		  transform: rotate(900deg);
+		  animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+		}
+		100% {
+		  transform: rotate(1800deg);
+		}
+	  }
+	  #fun-fact{
+		  display:none;
+	  }
+	  #loader{
+		display:none;
+	  }
 
-  
 
-	<section class="section">
+</style>
+<script>
+	function loading(){
+		var load = document.getElementById("loader")
+		var fun = document.getElementById("fun-fact")
 	
-			<div class="container has-text-centered is-vcentered">
-			   <div class="middle" id="loading">
-  <div class="bar bar1"></div>
-  <div class="bar bar2"></div>
-  <div class="bar bar3"></div>
-  <div class="bar bar4"></div>
-  <div class="bar bar5"></div>
-  <div class="bar bar6"></div>
-  <div class="bar bar7"></div>
-  <div class="bar bar8"></div>
-</div>
-  
-					
+		load.style.display='block'
+		fun.style.display='block'
+	}
+		
+	</script>
+
+	
+
+
+
+<section class="section">		
 					<div class="column  has-text-left ">
           <form method="POST" action="">
           {{form.hidden_tag()}}
@@ -78,22 +118,21 @@
             </div>
             </div>
 					
-						<div class="control">
+						<div class="control" >
 							 {{form.submit(class="button is-gold-button",onclick="loading()")}}
- 
+							
 						</div>
+						<div id="loader" class="lds-hourglass" style="margin-left:25vw; margin-top:150px;"></div>
+						<div id="fun-fact" style="margin-left:16vw; font-weight:500; ">Do you know that we send over 306.4 billion emails per day?</div>
 					</div>
 				</div>
 			</div>
         </form>
 		</div>
+	
    
 	</section>
-  <section class="section">
-
-  
-  </section>
-     
+	
 
 
 {% endblock content %}

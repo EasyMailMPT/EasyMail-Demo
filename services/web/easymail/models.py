@@ -24,7 +24,7 @@ class User(db.Model,UserMixin):
     deleted = db.Column(db.Boolean, nullable=False, server_default='False')
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
-    userEmails = db.relationship('UserEmails',backref="userEmails",lazy=True)
+    userEmails = db.relationship('Websites',backref="websites",lazy=True)
 
     def get_reset_token(self, expires_sec=1800):
         s = Serializer(app.config['SECRET_KEY'], expires_sec)
@@ -44,6 +44,7 @@ class Websites(db.Model):
     url = db.Column(db.String(40000), unique=False, nullable=False)
     keyword = db.Column(db.String(4000), unique=False, nullable=False)
     deleted = db.Column(db.Boolean, nullable=False, server_default='False')
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
     emails = db.relationship('Emails', backref='websites',lazy=True)
@@ -55,14 +56,4 @@ class Emails(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
     
-class UserEmails(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    website = db.Column(db.String(400000),unique=False,nullable=False)
-    keyword = db.Column(db.String(400000), unique=False,nullable=False)
-    email = db.Column(db.String(400000), unique=False,nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
-    created_at = db.Column(db.DateTime, server_default=db.func.now())
-    updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
-    
-
 db.create_all()

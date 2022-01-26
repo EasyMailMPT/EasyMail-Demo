@@ -1,5 +1,15 @@
 {% extends 'main.html' %}
+{% set active_page = "emails" %}
 {% block content %}
+<style>
+.box-xd:hover{
+    cursor:pointer;
+    background:lightyellow;
+    
+}
+
+
+</style>
 <section class="section">
 
     <div class="input">
@@ -9,54 +19,77 @@
 <section class="section">
     <div class="columns">
         <div class="column">
-            <p class="text" style="font-size:20px; font-weight:700; color:gold">Last search</p>
-            <br>
-            <div class="box">
-                Elektrycy
-                <span class="icon is-small is-right" style="margin-left:25vw;">
-                    <i class="fa fa-chevron-down"></i>
-                  </span>
-            </div>
-            
-            <div class="box">
-                Malarze Kraków
-                <span class="icon is-small is-right" style="margin-left:22.5vw;">
-                    <i class="fa fa-chevron-down"></i>
-                  </span>
-            </div>
-            <div class="box">
-                Architekci
-                <span class="icon is-small is-right" style="margin-left:25vw;">
-                    <i class="fa fa-chevron-down"></i>
-                  </span>
-            </div>
-        </div>
-        <div class="column">
-            <p class="text" style="font-size:20px; font-weight:700; color:gold">Favourtie</p>
-            <br>
-            <div class="box">
-                Stacje benzynowe kraków
-                <span class="icon is-small is-right" style="margin-left:19vw;">
-                    <i class="fa fa-chevron-down"></i>
-                  </span>
-            </div>
-            <div class="box">
-                Panele słoneczne
-                <span class="icon is-small is-right" style="margin-left:22vw;">
-                    <i class="fa fa-chevron-down"></i>
-                  </span>
-            </div>
-            <div class="box">
-                Sklepy spozywczne
-                <span class="icon is-small is-right" style="margin-left:21.5vw;">
-                    <i class="fa fa-chevron-down"></i>
-                  </span>
-            </div>
-        </div>
-      
-    </div>
-    <button class="button is-primary">Show more</button>
-</section>
+            <p class="text" style="font-size:20px; font-weight:700; color:gold">Your searches<span class="icon is-small is-right" style="margin-right:65px;margin-top:5px; float:right;">
+                <a href="{{ url_for('Panel.createCSV',keyword="all_master_easy") }}" class="button is-primary " style="position:relative;float:right">Download All</a>
+                 </span></p>
 
+            <br>
+           
+           
+            
+           
+            {%for keyword in keywords%}
+            <div class="box box-xd collapsible"  style="margin-top:10px;font-weight:700px;">{{keyword}} <span class="icon is-small is-right" style="margin-right:65px;margin-top:5px; float:right;">
+            <a href="{{ url_for('Panel.createCSV',keyword=keyword) }}" class="button is-primary " style="position:relative;float:right">Download CSV</a>
+             </span></div>
+             
+              <table class="table is-fullwidth " style="display:none;">
+                <thead>
+                  <tr>
+                    
+                    <th>Website</th>
+                    <th>Email</th>
+                    <th>Valid</th>
+                    <th>Learn more</th>
+                   
+                  </tr>
+                </thead>
+                <tbody >
+              
+                {% for mail in mails%}
+              {%if mail.keyword == keyword%}
+                  <tr >
+                   
+                    <td><a href='{{mail.url}}'>{{mail.url}}  </td>
+                   
+                    <td><a href='mailto:{{mail.email}}'>{{mail.email}}</a></td>
+                    <td style="color:green">True</td>
+                    <td>Comming soon</td>
+                   
+                  </tr>
+                  {%endif%}
+                 {%endfor%}
+                </tbody>
+              </table>    
+            
+             {%endfor%}
+         
+           
+          
+
+           
+     
+        </div> 
+    </div>
+
+</section>
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "none") {
+      content.style.display = "unset";
+    } else {
+      content.style.display = "none";
+    }
+  });
+}
+
+
+</script>
 
 {% endblock content %}

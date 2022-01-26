@@ -50,26 +50,19 @@ a:hover{
         <img src="static/photos/logo.png">
           <ul class="menu-list">
             <li>
-              <a href="/search">
+              <a href="/search" class="{%if active_page=="search"%}is-active{%else%}{%endif%}">
                 <span class="icon"><i class="fa fa-search"></i></span> Search
               </a>
             </li>
             <li>
-              <a href="/emails" class="is-active">
+              <a href="/emails" class="{%if active_page=="emails"%}is-active{%else%}{%endif%}">
                 <span class="icon"><i class="fa fa-envelope"></i></span> Emails
               </a>
       
              
             </li>
-            <li>
-                <a href="#" class="">
-                  <span class="icon"><i class="fa fa-lightbulb"></i></span> New
-                </a>
-        
-               
-              </li>
               <li>
-                <a href="#" class="">
+                <a href="#" class="{%if active_page=="user"%}is-active{%else%}{%endif%}">
                   <span class="icon"><i class="fa fa-user"></i></span> User
                 </a>
         
